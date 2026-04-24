@@ -1,0 +1,47 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: macos-15
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # needed for git describe (VERSION)
+
+      - name: Build DMG + PKG
+        run: make release
+
+      - name: Publish GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            MusicFormatSwitcher-*.dmg
+            MusicFormatSwitcher-*.pkg
+          body: |
+            ## Music Format Switcher
+
+            Schaltet die Abtastrate des Audiogeräts automatisch um,
+            sobald Apple Music einen neuen Track spielt.
+
+            ### Installation
+
+            **DMG** — empfohlen:
+            1. DMG öffnen
+            2. App in den Ordner _Applications_ ziehen
+            3. App per Rechtsklick → **Öffnen** starten (einmalig, wegen Gatekeeper)
+
+            **PKG** — Alternative:
+            1. PKG öffnen und dem Installer folgen
+            2. App per Rechtsklick → **Öffnen** starten (einmalig, wegen Gatekeeper)
+
+            > **Hinweis:** Die App ist nicht notarisiert (kein Apple-Developer-Konto).
+            > macOS zeigt beim ersten Start eine Warnung — Rechtsklick → Öffnen genügt.

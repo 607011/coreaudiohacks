@@ -1,0 +1,23 @@
+.DS_Store
+.claude
+.build
+.vscode
+
+# Kompilierte Binaries
+music-format-daemon
+*.dSYM
+
+# Gebaute App-Bundles und Installer-Artefakte
+*.app
+*.dmg
+*.pkg
+
+# Temporäre Staging-Verzeichnisse
+dmg-staging/
+pkg-root/
+
+# Xcode (falls doch mal angelegt)
+*.xcworkspace
+*.xcodeproj
+*.xcuserstate
+*.xcconfig
