@@ -29,19 +29,19 @@ jobs:
           body: |
             ## Music Format Switcher
 
-            Schaltet die Abtastrate des Audiogeräts automatisch um,
-            sobald Apple Music einen neuen Track spielt.
+            Automatically switches the audio device's sample rate and bit depth
+            to match the currently playing Apple Music track.
 
             ### Installation
 
-            **DMG** — empfohlen:
-            1. DMG öffnen
-            2. App in den Ordner _Applications_ ziehen
-            3. App per Rechtsklick → **Öffnen** starten (einmalig, wegen Gatekeeper)
+            **DMG** — recommended:
+            1. Open the DMG
+            2. Drag the app into the _Applications_ folder
+            3. Right-click the app → **Open** on first launch (required for Gatekeeper)
 
-            **PKG** — Alternative:
-            1. PKG öffnen und dem Installer folgen
-            2. App per Rechtsklick → **Öffnen** starten (einmalig, wegen Gatekeeper)
+            **PKG** — alternative:
+            1. Open the PKG and follow the installer
+            2. Right-click the app → **Open** on first launch (required for Gatekeeper)
 
-            > **Hinweis:** Die App ist nicht notarisiert (kein Apple-Developer-Konto).
-            > macOS zeigt beim ersten Start eine Warnung — Rechtsklick → Öffnen genügt.
+            > **Note:** This app is not notarized (no Apple Developer account).
+            > macOS will show a warning on first launch — right-clicking and choosing Open is enough to proceed.

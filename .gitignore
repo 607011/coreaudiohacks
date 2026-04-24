@@ -3,20 +3,20 @@
 .build
 .vscode
 
-# Kompilierte Binaries
+# Compiled binaries
 music-format-daemon
 *.dSYM
 
-# Gebaute App-Bundles und Installer-Artefakte
+# Built app bundles and installer artifacts
 *.app
 *.dmg
 *.pkg
 
-# Temporäre Staging-Verzeichnisse
+# Temporary staging directories
 dmg-staging/
 pkg-root/
 
-# Xcode (falls doch mal angelegt)
+# Xcode (in case it gets created)
 *.xcworkspace
 *.xcodeproj
 *.xcuserstate
