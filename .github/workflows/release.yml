@@ -37,11 +37,17 @@ jobs:
             **DMG** — recommended:
             1. Open the DMG
             2. Drag the app into the _Applications_ folder
-            3. Right-click the app → **Open** on first launch (required for Gatekeeper)
 
             **PKG** — alternative:
             1. Open the PKG and follow the installer
-            2. Right-click the app → **Open** on first launch (required for Gatekeeper)
 
-            > **Note:** This app is not notarized (no Apple Developer account).
-            > macOS will show a warning on first launch — right-clicking and choosing Open is enough to proceed.
+            ### Gatekeeper
+
+            This app is not notarized. macOS 15 and later block unnotarized downloads and no longer allow a simple right-click → Open workaround.
+
+            **Easiest fix — remove the quarantine flag before opening:**
+            ```bash
+            xattr -cr ~/Downloads/MusicFormatSwitcher-*.dmg
+            ```
+
+            **Alternative:** After macOS blocks the app, open **System Settings → Privacy & Security**, scroll down to the blocked-app notice, and click **Open Anyway**.

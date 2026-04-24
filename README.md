@@ -10,7 +10,7 @@ A macOS menu bar app that automatically switches your USB DAC's sample rate and 
 
 ## How it works
 
-Apple Music broadcasts a notification whenever a track starts playing. Music Format Switcher listens for these notifications, queries the track's native sample rate via AppleScript, and sets the CoreAudio physical format of your DAC accordingly — sample rate and bit depth in one step, with no audible interruption.
+Apple Music broadcasts a notification whenever a track starts playing. Music Format Switcher listens for these notifications, queries the track's native sample rate via AppleScript, and sets the CoreAudio physical format of your DAC accordingly — sample rate and bit depth in one step, with (mostly) no audible interruption.
 
 If the sample rate isn't available immediately (common with streamed tracks), the app retries with exponential back-off until the information is ready.
 
@@ -32,18 +32,27 @@ If the sample rate isn't available immediately (common with streamed tracks), th
 
 Download the latest **DMG** or **PKG** from the [Releases](../../releases) page.
 
-> **Gatekeeper notice:** The app is not notarized. On first launch, right-click the app and choose **Open** to bypass the macOS warning.
+> **Gatekeeper notice:** The app is not notarized. macOS 15 and later no longer allow bypassing this warning with a simple right-click → Open. Use one of the options below.
+
+**Option A — remove the quarantine flag before opening (easiest):**
+```bash
+xattr -cr ~/Downloads/MusicFormatSwitcher-*.dmg
+```
+Then open the DMG normally.
+
+**Option B — allow it after the fact:**
+After macOS blocks the app, open **System Settings → Privacy & Security**, scroll down to the blocked-app notice, and click **Open Anyway**.
 
 ### DMG
 
-1. Open the DMG
-2. Drag **MusicFormatSwitcher** into the _Applications_ folder
-3. Right-click → **Open** on first launch
+1. Remove the quarantine flag (see above) or be prepared to visit Privacy & Security
+2. Open the DMG
+3. Drag **MusicFormatSwitcher** into the _Applications_ folder
 
 ### PKG
 
-1. Open the PKG and follow the installer
-2. Right-click → **Open** on first launch
+1. Remove the quarantine flag (see above) or be prepared to visit Privacy & Security
+2. Open the PKG and follow the installer
 
 On first run the app will ask for permission to control Apple Music via AppleScript — click **Allow**.
 
