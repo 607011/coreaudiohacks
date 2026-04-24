@@ -2,6 +2,7 @@ import Foundation
 import CoreAudio
 import ServiceManagement
 import AppKit
+import UserNotifications
 
 class MusicMonitor: ObservableObject {
     @Published var lastTrack: String = ""
@@ -11,6 +12,13 @@ class MusicMonitor: ObservableObject {
 
     @Published var isEnabled: Bool {
         didSet { UserDefaults.standard.set(isEnabled, forKey: "isEnabled") }
+    }
+
+    @Published var notificationsEnabled: Bool {
+        didSet {
+            UserDefaults.standard.set(notificationsEnabled, forKey: "notificationsEnabled")
+            if notificationsEnabled { requestNotificationPermission() }
+        }
     }
 
     @Published var launchAtLogin: Bool = false {
@@ -23,10 +31,12 @@ class MusicMonitor: ObservableObject {
 
     init() {
         isEnabled = UserDefaults.standard.object(forKey: "isEnabled") as? Bool ?? true
+        notificationsEnabled = UserDefaults.standard.object(forKey: "notificationsEnabled") as? Bool ?? false
         deviceName = UserDefaults.standard.string(forKey: "deviceName") ?? "D10s"
         launchAtLogin = SMAppService.mainApp.status == .enabled
         refreshDevices()
         startMonitoring()
+        if notificationsEnabled { requestNotificationPermission() }
     }
 
     func refreshDevices() {
@@ -119,6 +129,7 @@ class MusicMonitor: ObservableObject {
                 lastTrack = trackName
                 lastSampleRate = sampleRate
                 lastBits = match.mBitsPerChannel
+                sendNotification(trackName: trackName, sampleRate: sampleRate, bits: match.mBitsPerChannel)
                 return
             }
 
@@ -126,9 +137,29 @@ class MusicMonitor: ObservableObject {
                 lastTrack = trackName
                 lastSampleRate = sampleRate
                 lastBits = match.mBitsPerChannel
+                sendNotification(trackName: trackName, sampleRate: sampleRate, bits: match.mBitsPerChannel)
             }
             return
         }
+    }
+
+    // MARK: - Notifications
+
+    private func requestNotificationPermission() {
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert]) { _, _ in }
+    }
+
+    private func sendNotification(trackName: String, sampleRate: Int, bits: UInt32) {
+        guard notificationsEnabled else { return }
+        let content = UNMutableNotificationContent()
+        content.title = trackName.isEmpty ? "Now Playing" : trackName
+        content.body = "\(sampleRate.formatted()) Hz · \(bits)-bit"
+        let request = UNNotificationRequest(
+            identifier: "track-change",
+            content: content,
+            trigger: nil
+        )
+        UNUserNotificationCenter.current().add(request) { _ in }
     }
 
     // MARK: - Launch at Login

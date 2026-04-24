@@ -16,6 +16,7 @@ struct ContentView: View {
             footer
         }
         .frame(width: 270)
+        .onAppear { monitor.refreshDevices() }
     }
 
     // MARK: - Sections
@@ -67,6 +68,7 @@ struct ContentView: View {
     private var toggleSection: some View {
         VStack(alignment: .leading, spacing: 6) {
             Toggle("Active", isOn: $monitor.isEnabled)
+            Toggle("Show notifications", isOn: $monitor.notificationsEnabled)
             Toggle("Launch at Login", isOn: $monitor.launchAtLogin)
         }
         .toggleStyle(.checkbox)
@@ -76,6 +78,10 @@ struct ContentView: View {
 
     private var footer: some View {
         HStack {
+            Button("Rescan Audio Devices") { monitor.refreshDevices() }
+                .buttonStyle(.plain)
+                .foregroundStyle(.secondary)
+                .font(.callout)
             Spacer()
             Button("Quit") { NSApp.terminate(nil) }
                 .buttonStyle(.plain)

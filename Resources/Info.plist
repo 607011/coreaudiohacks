@@ -22,6 +22,8 @@
     <true/>
     <key>NSAppleEventsUsageDescription</key>
     <string>Music Format Switcher reads the sample rate of the currently playing track.</string>
+    <key>NSUserNotificationUsageDescription</key>
+    <string>Music Format Switcher can notify you when the audio format is switched.</string>
     <key>NSPrincipalClass</key>
     <string>NSApplication</string>
 </dict>
