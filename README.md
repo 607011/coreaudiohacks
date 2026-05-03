@@ -65,7 +65,7 @@ The target device is configured directly in the menu bar popover. The setting is
 Requires Xcode Command Line Tools (`xcode-select --install`).
 
 ```bash
-git clone https://github.com/olaublau/coreaudiohacks.git
+git clone https://github.com/607011/coreaudiohacks.git
 cd coreaudiohacks
 make install          # builds and copies to ~/Applications
 ```
