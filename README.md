@@ -87,10 +87,6 @@ git tag v1.1
 git push origin v1.1  # triggers GitHub Actions → publishes DMG + PKG automatically
 ```
 
-## Legacy CLI daemon
-
-The original command-line daemon (`music-format-daemon.swift`) and one-shot helper scripts (`sync-samplerate.swift`, `sync-format.swift`) are kept in the repository for reference. The menu bar app supersedes them.
-
 ## License
 
-MIT
+[MIT](LICENSE)
