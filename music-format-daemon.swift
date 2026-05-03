@@ -189,31 +189,35 @@ func currentTrackSampleRate() -> Int? {
 }
 
 /// Retries until a non-zero sample rate is returned or all attempts are exhausted.
-/// Intervals: 0.1 s, 0.2 s, 0.4 s, 0.8 s  (exponential back-off, max ~1.5 s total)
 func currentTrackSampleRateWithRetry(
     attempt: Int = 1,
-    maxAttempts: Int = 4,
+    maxAttempts: Int = 100,
     trackName: String,
     then completion: @escaping (Int?) -> Void
 ) {
-    if let sr = currentTrackSampleRate() {
-        completion(sr)
-        return
+    var completed = false
+    
+    func retry(attempt: Int) {
+        if completed { return }
+        
+        if let sr = currentTrackSampleRate() {
+            completed = true
+            completion(sr)
+            return
+        }
+        guard attempt < maxAttempts else {
+            completed = true
+            completion(nil)
+            return
+        }
+        let interval = 0.150 * Double(attempt)
+        log("Sample rate not yet available for \"\(trackName)\" — retrying in \(String(format: "%.1f", interval))s (attempt \(attempt)/\(maxAttempts))")
+        DispatchQueue.main.asyncAfter(deadline: .now() + interval) {
+            retry(attempt: attempt + 1)
+        }
     }
-    guard attempt < maxAttempts else {
-        completion(nil)
-        return
-    }
-    let interval = 0.1 * pow(2.0, Double(attempt - 1))
-    log("Sample rate not yet available for \"\(trackName)\" — retrying in \(String(format: "%.1f", interval))s (attempt \(attempt)/\(maxAttempts))")
-    DispatchQueue.main.asyncAfter(deadline: .now() + interval) {
-        currentTrackSampleRateWithRetry(
-            attempt: attempt + 1,
-            maxAttempts: maxAttempts,
-            trackName: trackName,
-            then: completion
-        )
-    }
+    
+    retry(attempt: attempt)
 }
 
 // MARK: - Config (~/.config/music-format-daemon.yaml)
