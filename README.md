@@ -12,7 +12,7 @@ A macOS menu bar app that automatically switches your USB DAC's sample rate and 
 
 Apple Music broadcasts a notification whenever a track starts playing. Music Format Switcher listens for these notifications, queries the track's native sample rate via AppleScript, and sets the CoreAudio physical format of your DAC accordingly — sample rate and bit depth in one step, with (mostly) no audible interruption.
 
-If the sample rate isn't available immediately (common with streamed tracks), the app retries with exponential back-off until the information is ready.
+If the sample rate isn't available immediately (common with streamed tracks), the app retries in regular intervals until the information is ready.
 
 ## Features
 
