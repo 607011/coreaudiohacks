@@ -25,8 +25,8 @@ If the sample rate isn't available immediately (common with streamed tracks), th
 ## Requirements
 
 - macOS 13 Ventura or later
-- Apple Music with Lossless or Hi-Res Lossless enabled
-- A USB DAC (tested with Topping D10s)
+- Apple Music, ideally with Lossless or Hi-Res Lossless enabled
+- A USB DAC (tested with Topping D10s, Fiio K7 and Focusrite Scarlett 2i2)
 
 ## Installation
 
