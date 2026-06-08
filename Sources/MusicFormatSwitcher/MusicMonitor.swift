@@ -8,6 +8,7 @@ class MusicMonitor: ObservableObject {
     @Published var lastTrack: String = ""
     @Published var lastSampleRate: Int = 0
     @Published var lastBits: UInt32 = 0
+    @Published var lastFormatType: String = ""
     @Published var availableDevices: [String] = []
 
     @Published var isEnabled: Bool {
@@ -91,7 +92,7 @@ class MusicMonitor: ObservableObject {
         proc.executableURL = URL(fileURLWithPath: "/usr/bin/osascript")
         proc.arguments = ["-e", """
             tell application "Music"
-                if player state is playing or player state is paused then
+                if player state is playing then
                     set sr to sample rate of current track
                     if sr is missing value then return 0
                     return sr
@@ -123,13 +124,16 @@ class MusicMonitor: ObservableObject {
             guard let match = bestFormat(from: available, sampleRate: Float64(sampleRate),
                                          bitsPerChannel: 24) else { continue }
 
+            let formatType = (match.mFormatFlags & kAudioFormatFlagIsFloat) != 0 ? "float" : "int"
+
             if let current = currentPhysicalFormat(of: streamID),
                current.mSampleRate == match.mSampleRate,
                current.mBitsPerChannel == match.mBitsPerChannel {
                 lastTrack = trackName
                 lastSampleRate = sampleRate
                 lastBits = match.mBitsPerChannel
-                sendNotification(trackName: trackName, sampleRate: sampleRate, bits: match.mBitsPerChannel)
+                lastFormatType = formatType
+                sendNotification(trackName: trackName, sampleRate: sampleRate, bits: match.mBitsPerChannel, formatType: formatType)
                 return
             }
 
@@ -137,7 +141,8 @@ class MusicMonitor: ObservableObject {
                 lastTrack = trackName
                 lastSampleRate = sampleRate
                 lastBits = match.mBitsPerChannel
-                sendNotification(trackName: trackName, sampleRate: sampleRate, bits: match.mBitsPerChannel)
+                lastFormatType = formatType
+                sendNotification(trackName: trackName, sampleRate: sampleRate, bits: match.mBitsPerChannel, formatType: formatType)
             }
             return
         }
@@ -149,11 +154,11 @@ class MusicMonitor: ObservableObject {
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert]) { _, _ in }
     }
 
-    private func sendNotification(trackName: String, sampleRate: Int, bits: UInt32) {
+    private func sendNotification(trackName: String, sampleRate: Int, bits: UInt32, formatType: String) {
         guard notificationsEnabled else { return }
         let content = UNMutableNotificationContent()
         content.title = trackName.isEmpty ? "Now Playing" : trackName
-        content.body = "\(sampleRate.formatted()) Hz · \(bits)-bit"
+        content.body = "\(sampleRate.formatted()) Hz · \(bits)-bit \(formatType)"
         let request = UNNotificationRequest(
             identifier: "track-change",
             content: content,

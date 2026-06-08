@@ -55,7 +55,7 @@ struct ContentView: View {
                     .font(.caption)
                     .lineLimit(1)
                     .truncationMode(.tail)
-                Text("\(monitor.lastSampleRate.formatted()) Hz · \(monitor.lastBits)-bit")
+                Text("\(monitor.lastSampleRate.formatted()) Hz · \(monitor.lastBits)-bit \(monitor.lastFormatType)")
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }
